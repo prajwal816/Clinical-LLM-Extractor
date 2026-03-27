@@ -40,4 +40,4 @@ print("\nDate normalization:")
 for d in test_dates:
     print(f"  '{d}' -> '{normalize_date(d)}'")
 
-print("\n✓ All smoke tests passed!")
+print("\n[OK] All smoke tests passed!")
