@@ -8,12 +8,12 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-import config
-from document_loader import load_patient_notes
-from extractor import extract_conditions_for_patient
-from llm_client import LLMClient
-from output_formatter import format_patient_output, write_patient_output
-from taxonomy_mapper import validate_and_fix_conditions
+from src import config
+from src.document_loader import load_patient_notes
+from src.extractor import extract_conditions_for_patient
+from src.llm_client import LLMClient
+from src.output_formatter import format_patient_output, write_patient_output
+from src.taxonomy_mapper import validate_and_fix_conditions
 
 
 def setup_logging(verbose: bool = False):

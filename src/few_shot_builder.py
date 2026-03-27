@@ -4,7 +4,7 @@ import json
 import logging
 from pathlib import Path
 
-from document_loader import Note, format_note_for_prompt
+from src.document_loader import Note, format_note_for_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +93,7 @@ def get_few_shot_messages(
 
     Returns list of message dicts suitable for inserting into chat messages.
     """
-    from document_loader import load_patient_notes
+    from src.document_loader import load_patient_notes
 
     if example_patient_ids is None:
         example_patient_ids = ["patient_06"]

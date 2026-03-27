@@ -4,10 +4,10 @@ import json
 import logging
 from pathlib import Path
 
-from config import build_taxonomy_prompt_section, load_taxonomy
-from document_loader import Note, format_note_for_prompt
-from few_shot_builder import get_few_shot_messages
-from llm_client import LLMClient
+from src.config import build_taxonomy_prompt_section, load_taxonomy
+from src.document_loader import Note, format_note_for_prompt
+from src.few_shot_builder import get_few_shot_messages
+from src.llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
 

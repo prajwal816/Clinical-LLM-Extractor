@@ -1,11 +1,14 @@
 """Quick smoke test for the pipeline modules."""
 import json
 from pathlib import Path
-from document_loader import load_patient_notes
-from config import load_taxonomy, get_valid_category_subcategory_pairs
-from taxonomy_mapper import validate_and_fix_conditions
-from few_shot_builder import get_few_shot_messages
-from output_formatter import normalize_date
+import sys
+sys.path.append(str(Path(__file__).parent.parent))
+
+from src.document_loader import load_patient_notes
+from src.config import load_taxonomy, get_valid_category_subcategory_pairs
+from src.taxonomy_mapper import validate_and_fix_conditions
+from src.few_shot_builder import get_few_shot_messages
+from src.output_formatter import normalize_date
 
 # Test document loading
 notes = load_patient_notes("train", "patient_06")

@@ -3,7 +3,7 @@
 import logging
 import re
 
-from config import get_valid_category_subcategory_pairs, get_status_values
+from src.config import get_valid_category_subcategory_pairs, get_status_values
 
 logger = logging.getLogger(__name__)
 

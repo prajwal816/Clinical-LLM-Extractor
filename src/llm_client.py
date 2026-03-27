@@ -8,7 +8,7 @@ from typing import Any
 
 from openai import OpenAI
 
-import config
+from src import config
 
 logger = logging.getLogger(__name__)
 

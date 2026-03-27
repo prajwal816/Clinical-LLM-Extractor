@@ -20,7 +20,7 @@ LLM_MAX_RETRIES = 3
 # ---------------------------------------------------------------------------
 # Taxonomy
 # ---------------------------------------------------------------------------
-TAXONOMY_PATH = Path(__file__).parent / "taxonomy.json"
+TAXONOMY_PATH = Path(__file__).parent.parent / "taxonomy.json"
 
 
 def load_taxonomy(path: Path | None = None) -> dict:
