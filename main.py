@@ -174,11 +174,11 @@ def main():
             if result:
                 results[patient_id] = result
                 n_conds = len(result.get("conditions", []))
-                logger.info(f"✓ {patient_id}: {n_conds} conditions extracted")
+                logger.info(f"[OK] {patient_id}: {n_conds} conditions extracted")
             else:
-                logger.error(f"✗ {patient_id}: extraction failed")
+                logger.error(f"[FAIL] {patient_id}: extraction failed")
         except Exception as e:
-            logger.error(f"✗ {patient_id}: {e}", exc_info=True)
+            logger.error(f"[FAIL] {patient_id}: {e}", exc_info=True)
     
     # Summary
     logger.info(f"\n{'='*60}")

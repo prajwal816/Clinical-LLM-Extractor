@@ -116,7 +116,7 @@ def main():
                 logger.error(f"  - {err}")
             total_errors += len(errors)
         else:
-            logger.info(f"✓ {filepath.name}: {n_conds} conditions — VALID")
+            logger.info(f"[OK] {filepath.name}: {n_conds} conditions - VALID")
     
     logger.info(f"\n{'='*50}")
     logger.info(f"Validated {len(files)} files, {total_conditions} total conditions")
@@ -125,7 +125,7 @@ def main():
         logger.error(f"{total_errors} total errors found")
         sys.exit(1)
     else:
-        logger.info("All files are valid! ✓")
+        logger.info("All files are valid!")
 
 
 if __name__ == "__main__":
