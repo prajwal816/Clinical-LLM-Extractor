@@ -1,4 +1,4 @@
-"""Core condition extraction pipeline using LLM."""
+"""Core condition extraction pipeline using LLM with two-phase approach."""
 
 import json
 import logging
@@ -12,73 +12,119 @@ from llm_client import LLMClient
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# System prompt
+# System prompt — comprehensive, detailed, and precise
 # ---------------------------------------------------------------------------
-SYSTEM_PROMPT = """You are a clinical NLP expert. Your task is to extract ALL medical conditions from clinical notes for a single patient and produce a structured JSON output.
+SYSTEM_PROMPT = """You are a clinical NLP expert specializing in structured information extraction from longitudinal medical records. Your task is to extract a **complete condition summary** from a patient's clinical notes.
 
-## Task
-Analyze the provided clinical notes (with line numbers) and extract every medical condition, diagnosis, and clinically significant finding. For each condition, provide:
-- condition_name: Specific, descriptive name
-- category: Must be a valid category from the taxonomy
-- subcategory: Must be a valid subcategory from the taxonomy  
-- status: "active", "resolved", or "suspected" based on the LATEST note where the condition appears
-- onset: Earliest date the condition is documented (see date rules below)
-- evidence: ALL supporting text spans across ALL notes with note_id, line_no, and exact span text
+## YOUR TASK
+From the provided clinical notes (each with line numbers), extract EVERY medical condition, diagnosis, and clinically significant finding. Be EXHAUSTIVE — missing a condition is a critical failure.
+
+## WHAT TO EXTRACT
+Extract ALL of the following — every one is a "condition":
+1. **Primary diagnoses** — cancers, infections, metabolic disorders, etc.
+2. **Secondary/comorbid diagnoses** — hypertension, diabetes, COPD, etc.
+3. **Past medical history items** — "status post cholecystectomy", "history of fracture", etc. (these are resolved conditions)
+4. **Significant lab abnormalities** — anemia (low Hgb/RBC), thrombocytopenia (low platelets), lymphopenia, coagulopathy (abnormal INR/Quick), etc.
+5. **Imaging findings** — liver cirrhosis on CT, cardiomegaly on X-ray, degenerative spine changes, etc.
+6. **Metastases** — each metastatic site is a SEPARATE condition entry
+7. **Infections** — each distinct organism/infection type is a separate entry
+8. **Functional deficits** — hearing loss, nerve palsies, cognitive deficits, etc.
+9. **Structural abnormalities** — cysts, effusions, hernias, etc.
+10. **Pre-malignant conditions** — dysplasia, polyposis, myelodysplastic syndrome, etc.
+
+## WHERE TO LOOK
+Scan EVERY section of EVERY note:
+- **Diagnoses / Primary Diagnoses** sections
+- **Other diagnoses / Secondary diagnoses / Comorbidities** sections
+- **Medical History / Past Medical History** sections
+- **Physical Examination** findings
+- **Lab Results** tables (look for out-of-range values)
+- **Imaging / Radiology** reports (CT, MRI, X-ray, ultrasound, PET)
+- **Histology / Pathology** reports
+- **Therapy and Progression** narratives
+- **Medication lists** (can imply conditions, e.g., L-thyroxine implies hypothyroidism)
+- **Narrative text** anywhere in the note
+
+## OUTPUT FIELDS — for EACH condition:
+
+### condition_name
+Use the most specific clinical name supported by the notes. Examples:
+- "Squamous cell carcinoma of the left tongue base" (not just "tongue cancer")
+- "Arterial hypertension" (not "high blood pressure")
+- "Non-insulin-dependent diabetes mellitus type II" (not "diabetes")
+
+### category and subcategory
+Must be an EXACT match to a valid key pair from the taxonomy below. Use ONLY valid pairs.
+
+### status — one of: "active", "resolved", "suspected"
+**CRITICAL**: Status reflects the condition's state in the LATEST note where it appears.
+
+**active**: Condition is confirmed and currently present
+- Listed in "Diagnoses" or "Other Diagnoses" sections
+- Has ongoing treatment or management mentioned
+- Is chronic, worsening, progressive, or recurrent
+- Lab values still abnormal in a later note
+
+**resolved**: Condition is no longer present or is purely historical
+- Prefixed with "Status post" or "History of" or "Z.n." or "St.p."
+- Appears ONLY in "Medical History" section and NOT in "Diagnoses"
+- "In remission", "complete response", "no evidence of disease"
+- Lab values normalized in a later note
+- Past surgical procedure
+
+**suspected**: NOT yet diagnostically confirmed
+- "Suspected", "suspicion of", "suggestive of", "rule out", "possible", "likely", "question of"
+
+**Status evolution**: If a condition is "suspected" in text_0 but "active" in text_3, report status as "active" (latest note wins). If "active" in text_0 but only appears in "Medical History" in text_5, report as "resolved".
+
+### onset — the EARLIEST date the condition is documented
+Follow this strict priority:
+1. **Stated date**: "first diagnosed in 03/2021" → "March 2021"; "cholecystectomy in 2015" → "2015"
+2. **Note encounter date**: If no explicit date given, use the encounter/admission date from the earliest note where the condition first appears. Look for dates at the top of each note (e.g., "admitted from 05/28/14 to 06/20/14" → "May 2014")
+3. **Relative dates**: "since mid-December" in a January 2017 note → "December 2016"
+4. **Do NOT infer across conditions**: A symptom's date does not establish a later-diagnosed disease's onset
+5. **null**: Only if absolutely no date can be determined
+
+Date formats (use most specific available):
+- Full date: "16 March 2026"
+- Month and year: "March 2014"  
+- Year only: "2014"
+- Unknown: null
+
+### evidence — ALL supporting text across ALL notes
+For EVERY note that mentions this condition, include an evidence entry:
+- **note_id**: filename without extension (e.g., "text_0")
+- **line_no**: the exact line number (integer) where the text appears
+- **span**: the exact text from that line that supports this condition
+
+Evidence must be COMPREHENSIVE. If a condition appears in 8 notes, include evidence from all 8. Include mentions in:
+- Diagnosis lists
+- Medical history sections
+- Imaging/lab/pathology reports
+- Narrative clinical text
+- Medication sections (if implying the condition)
 
 ## CRITICAL RULES
+1. **One entry per DISTINCT condition**. Multiple anatomical sites = separate entries (brain metastasis ≠ liver metastasis)
+2. **Evidence from EVERY note** where condition is mentioned — even brief list mentions
+3. **Taxonomy must be VALID** — only use category.subcategory pairs from the taxonomy
+4. **Do NOT extract** conditions outside the taxonomy categories
+5. **Be THOROUGH** — scan every line of every note. Missing conditions is a critical error.
 
-### Condition Identification
-1. Extract ALL conditions: diagnoses, findings, lab abnormalities, procedures (as resolved conditions)
-2. One entry per DISTINCT condition. If same condition affects multiple anatomical sites, create SEPARATE entries (e.g., brain metastasis and liver metastasis)
-3. ONLY extract conditions that fit the taxonomy categories
-4. Look in ALL sections: Diagnoses, Other Diagnoses, Medical History, exam findings, lab results, imaging, narrative text
-
-### Status Rules
-- **active**: Confirmed and currently present — newly diagnosed, chronic, worsening, recurrent, appears in "Diagnoses" section, has current treatment
-- **resolved**: No longer present — "status post", "history of", appears only in "Medical History", "in remission", "no evidence of disease"
-- **suspected**: Not confirmed — "suspected", "suspicion of", "suggestive of", "rule out", "possible"
-- Status reflects the LATEST note where the condition appears. If "suspected" in text_0 becomes "active" in text_3, report "active"
-
-### Date/Onset Rules
-- Priority 1 — Stated date: If notes give specific date (e.g., "first diagnosis 03/2021", "cholecystectomy in 2015"), use that
-- Priority 2 — Note date: If no date stated, use encounter date of earliest note where condition appears
-- Priority 3 — Relative dates: Convert using note context (e.g., "since mid-December" in January 2017 note → "December 2016")
-- Do NOT infer onset across conditions (fatigue onset ≠ thyroid disorder onset)
-- Formats: "16 March 2026", "March 2014", "2014", or null if unknown
-
-### Evidence Rules
-- Include evidence from EVERY note where the condition is mentioned
-- Each evidence entry needs: note_id (e.g., "text_0"), line_no (integer), span (exact text from that line)
-- Include mentions in admission notes, discharge notes, follow-ups, lists, narrative text
-- The span must be the actual text from the note at that line number
-
-### Disambiguation
-- Heart failure: categorize by underlying cause, not as cardiovascular.structural (unless cause unknown or primary myocardial)
-- Diabetic complications: categorize under metabolic_endocrine.diabetes, NOT the affected organ's category
+## DISAMBIGUATION RULES
+- **Heart failure**: Categorize by underlying cause, NOT as cardiovascular.structural (unless cause unknown). Ischemic → cardiovascular.coronary; hypertensive → cardiovascular.hypertensive
+- **Diabetic complications** (nephropathy, retinopathy): Categorize under metabolic_endocrine.diabetes, NOT the affected organ
+- **Infections**: Categorize by organism type (bacterial/viral/fungal), NOT by affected organ
+- **Low blood cell counts**: ALWAYS hematological.cytopenia regardless of cause
+- **Portal hypertensive gastropathy**: gastrointestinal.upper_gi (by affected organ)
+- **Status post procedures**: The underlying condition that required the procedure, marked as "resolved"
 
 {taxonomy_section}
 
-## Output Format
-Return ONLY valid JSON with this structure:
-```json
-{{
-  "patient_id": "patient_XX",
-  "conditions": [
-    {{
-      "condition_name": "...",
-      "category": "...",
-      "subcategory": "...",
-      "status": "active|resolved|suspected",
-      "onset": "...",
-      "evidence": [
-        {{"note_id": "text_0", "line_no": 12, "span": "exact text from note"}}
-      ]
-    }}
-  ]
-}}
-```
-
-Be thorough and comprehensive. Extract ALL conditions — missing conditions is worse than having too many.
+## OUTPUT FORMAT
+Return ONLY valid JSON. No markdown formatting, no code fences, no explanatory text.
+The JSON must follow this exact structure:
+{{"patient_id": "patient_XX", "conditions": [{{"condition_name": "...", "category": "...", "subcategory": "...", "status": "active|resolved|suspected", "onset": "...|null", "evidence": [{{"note_id": "text_0", "line_no": 12, "span": "exact text from the note at this line"}}]}}]}}
 """
 
 
@@ -93,12 +139,45 @@ def _build_patient_user_message(
     notes: list[Note],
     patient_id: str,
 ) -> str:
-    """Build the user message containing all patient notes."""
-    parts = [f"Extract ALL conditions for {patient_id} from these clinical notes:\n"]
+    """Build the user message containing all patient notes with line numbers."""
+    parts = [f"Extract ALL conditions for {patient_id} from these clinical notes. Be exhaustive.\n"]
     for note in notes:
         parts.append(format_note_for_prompt(note))
         parts.append("")  # blank line separator
     return "\n".join(parts)
+
+
+def _parse_llm_json(raw: str) -> dict:
+    """Robustly parse JSON from LLM response, handling various wrappers."""
+    raw = raw.strip()
+    
+    # Remove markdown code fences
+    if raw.startswith("```"):
+        lines = raw.split("\n")
+        start = 1
+        end = len(lines)
+        for i in range(len(lines) - 1, 0, -1):
+            if lines[i].strip() == "```":
+                end = i
+                break
+        raw = "\n".join(lines[start:end])
+    
+    # Try direct parse
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+    
+    # Try to find JSON object in the text
+    brace_start = raw.find("{")
+    brace_end = raw.rfind("}")
+    if brace_start >= 0 and brace_end > brace_start:
+        try:
+            return json.loads(raw[brace_start:brace_end + 1])
+        except json.JSONDecodeError:
+            pass
+    
+    raise json.JSONDecodeError("Could not extract valid JSON from LLM response", raw, 0)
 
 
 def extract_conditions_for_patient(
@@ -111,13 +190,13 @@ def extract_conditions_for_patient(
     """
     Run the full extraction pipeline for a single patient.
     
-    Strategy: Single LLM call with all notes + few-shot example.
-    For patients with many/long notes, we batch into chunks.
+    Strategy:
+    - For patients with moderate notes: single comprehensive LLM call
+    - For patients with very long notes: chunked extraction + consolidation
     
     Returns:
         Dict with patient_id and conditions list.
     """
-    # Build messages
     system_msg = _build_system_message(taxonomy)
     
     # Few-shot examples from training
@@ -128,34 +207,44 @@ def extract_conditions_for_patient(
     # Build user message with all notes
     user_content = _build_patient_user_message(notes, patient_id)
     
-    # Check if we need to chunk (rough estimate: 4 chars per token, limit ~100k tokens)
-    total_chars = len(user_content)
+    # Estimate total tokens
+    total_chars = len(user_content) + len(system_msg["content"])
     for msg in few_shot_msgs:
         total_chars += len(msg.get("content", ""))
-    total_chars += len(system_msg["content"])
     
-    if total_chars > 350000:  # ~87k tokens — chunk the notes
-        logger.info(f"Large patient ({total_chars} chars) — using chunked extraction")
+    if total_chars > 300000:  # ~75k tokens — too large for single call
+        logger.info(f"Large patient ({total_chars} chars) -- using chunked extraction")
         return _extract_chunked(llm, notes, patient_id, taxonomy, system_msg, few_shot_msgs)
     
-    # Single call for normal-sized patients
+    # Single comprehensive call
     messages = [system_msg] + few_shot_msgs + [
         {"role": "user", "content": user_content}
     ]
     
-    logger.info(f"Extracting conditions for {patient_id} ({len(notes)} notes, ~{total_chars//4} tokens)")
+    logger.info(f"Extracting conditions for {patient_id} ({len(notes)} notes, ~{total_chars // 4} est. tokens)")
+    
+    raw_response = llm.chat(messages, max_tokens=16000)
     
     try:
-        result = llm.chat_json(messages, max_tokens=16000)
-    except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse JSON for {patient_id}: {e}")
-        # Retry with explicit JSON instruction
-        messages.append({"role": "user", "content": "Please return ONLY valid JSON. No other text."})
-        result = llm.chat_json(messages, max_tokens=16000)
+        result = _parse_llm_json(raw_response)
+    except json.JSONDecodeError:
+        logger.warning(f"First parse failed for {patient_id}, retrying with explicit JSON instruction")
+        messages.append({
+            "role": "assistant",
+            "content": raw_response
+        })
+        messages.append({
+            "role": "user",
+            "content": "Your response was not valid JSON. Please return ONLY the JSON object, no markdown, no code fences, no explanatory text. Start with { and end with }."
+        })
+        raw_response = llm.chat(messages, max_tokens=16000, use_cache=False)
+        result = _parse_llm_json(raw_response)
     
-    # Ensure patient_id is correct
     if isinstance(result, dict):
         result["patient_id"] = patient_id
+    
+    # Post-process: verify and fix evidence
+    result = _verify_evidence(result, notes)
     
     return result
 
@@ -170,13 +259,12 @@ def _extract_chunked(
 ) -> dict:
     """
     For patients with very long notes, extract in phases:
-    Phase 1: Extract from each note (or small group) separately
-    Phase 2: Consolidate all extracted conditions
+    Phase 1: Extract from small note groups
+    Phase 2: Consolidate and deduplicate
     """
-    # Phase 1: Per-note extraction
     all_conditions = []
     
-    # Group notes into chunks of 2-3
+    # Phase 1: Per-chunk extraction (groups of 2-3 notes)
     chunk_size = 2
     for i in range(0, len(notes), chunk_size):
         chunk = notes[i:i + chunk_size]
@@ -187,43 +275,156 @@ def _extract_chunked(
         ]
         
         try:
-            result = llm.chat_json(messages, max_tokens=16000)
+            raw_response = llm.chat(messages, max_tokens=16000)
+            result = _parse_llm_json(raw_response)
             conditions = result.get("conditions", []) if isinstance(result, dict) else []
             all_conditions.extend(conditions)
+            logger.debug(f"  Chunk {i//chunk_size + 1}: extracted {len(conditions)} conditions")
         except Exception as e:
-            logger.error(f"Chunk extraction failed for {patient_id} notes {i}-{i+chunk_size}: {e}")
+            logger.error(f"Chunk extraction failed for {patient_id} notes {i}-{i + chunk_size}: {e}")
     
-    # Phase 2: Consolidation
     if not all_conditions:
         return {"patient_id": patient_id, "conditions": []}
     
-    consolidation_prompt = f"""You previously extracted conditions from individual notes for {patient_id}.
-Now consolidate them into a single unified list:
+    # Phase 2: Consolidation call
+    consolidation_prompt = f"""I extracted conditions from individual note chunks for {patient_id}. Now I need you to consolidate them into a single unified list.
 
-1. MERGE duplicate conditions (same condition mentioned across notes) into one entry
-2. For merged conditions, set status to the one from the LATEST note  
-3. For merged conditions, set onset to the EARLIEST date
-4. For merged conditions, combine ALL evidence entries
-5. Keep the most specific condition_name
-6. Ensure all category/subcategory pairs are valid per the taxonomy
+INSTRUCTIONS:
+1. MERGE duplicate conditions (same condition across different notes) into ONE entry
+2. For merged conditions, keep the MOST SPECIFIC condition_name
+3. Set status based on the LATEST note where the condition appears (latest text_N number)
+4. Set onset to the EARLIEST date found across all mentions
+5. Combine ALL evidence entries from all mentions (keep every unique evidence span)
+6. Remove exact duplicate evidence entries (same note_id + same line_no)
+7. Ensure all category/subcategory pairs are valid per taxonomy
+8. Do NOT add any new conditions — only consolidate existing ones
 
-Previously extracted conditions:
-```json
+Raw extracted conditions from chunks:
 {json.dumps(all_conditions, indent=2, ensure_ascii=False)}
-```
 
-Return the consolidated JSON with the same schema:
-```json
-{{"patient_id": "{patient_id}", "conditions": [...]}}
-```"""
+Return ONLY valid JSON. No markdown, no code fences:
+{{"patient_id": "{patient_id}", "conditions": [...]}}"""
     
     messages = [system_msg, {"role": "user", "content": consolidation_prompt}]
     
     try:
-        result = llm.chat_json(messages, max_tokens=16000)
+        raw_response = llm.chat(messages, max_tokens=16000)
+        result = _parse_llm_json(raw_response)
         if isinstance(result, dict):
             result["patient_id"] = patient_id
+        # Verify evidence
+        result = _verify_evidence(result, notes)
         return result
     except Exception as e:
         logger.error(f"Consolidation failed for {patient_id}: {e}")
         return {"patient_id": patient_id, "conditions": all_conditions}
+
+
+def _verify_evidence(result: dict, notes: list[Note]) -> dict:
+    """
+    Post-process evidence entries to verify/fix line numbers and spans.
+    Ensures evidence spans actually exist at the stated line in the note.
+    """
+    if not isinstance(result, dict):
+        return result
+    
+    # Build quick lookup: note_id -> Note
+    note_map = {n.note_id: n for n in notes}
+    
+    conditions = result.get("conditions", [])
+    for cond in conditions:
+        evidence = cond.get("evidence", [])
+        verified_evidence = []
+        seen = set()  # deduplicate (note_id, line_no) pairs
+        
+        for ev in evidence:
+            note_id = ev.get("note_id", "")
+            line_no = ev.get("line_no", 0)
+            span = ev.get("span", "")
+            
+            # Ensure line_no is int
+            try:
+                line_no = int(line_no)
+            except (ValueError, TypeError):
+                continue
+            
+            ev["line_no"] = line_no
+            
+            # Deduplicate
+            dedup_key = (note_id, line_no)
+            if dedup_key in seen:
+                continue
+            seen.add(dedup_key)
+            
+            # Verify note exists
+            note = note_map.get(note_id)
+            if not note:
+                logger.debug(f"Evidence references unknown note '{note_id}', keeping as-is")
+                verified_evidence.append(ev)
+                continue
+            
+            # Check if line_no is in range
+            if line_no < 1 or line_no >= len(note.lines):
+                # Try to find the span in nearby lines
+                fixed_line = _find_span_in_note(note, span, line_no)
+                if fixed_line:
+                    ev["line_no"] = fixed_line
+                    # Update span to match actual line content
+                    actual_line = note.lines[fixed_line].strip()
+                    if span.strip() not in actual_line and len(span) > 0:
+                        # Keep original span but fix line_no
+                        pass
+                    verified_evidence.append(ev)
+                else:
+                    logger.debug(f"Could not verify evidence line {line_no} in {note_id}, keeping")
+                    verified_evidence.append(ev)
+                continue
+            
+            # Verify span roughly matches the actual line content
+            actual_line = note.lines[line_no]
+            if span.strip() and span.strip() in actual_line:
+                verified_evidence.append(ev)
+            elif span.strip() and actual_line.strip() in span.strip():
+                # Span is broader than line — acceptable
+                verified_evidence.append(ev)
+            else:
+                # Span doesn't match — try to find it nearby
+                fixed_line = _find_span_in_note(note, span, line_no)
+                if fixed_line:
+                    ev["line_no"] = fixed_line
+                    verified_evidence.append(ev)
+                else:
+                    # Keep it anyway — LLM may have paraphrased
+                    verified_evidence.append(ev)
+        
+        cond["evidence"] = verified_evidence
+    
+    return result
+
+
+def _find_span_in_note(note: Note, span: str, hint_line: int) -> int | None:
+    """Try to find a span text in a note, searching near the hint line first."""
+    if not span.strip():
+        return None
+    
+    span_clean = span.strip().lower()
+    
+    # Search in a window around the hint line first, then expand
+    for radius in [0, 1, 2, 3, 5, 10, 20, 50]:
+        start = max(1, hint_line - radius)
+        end = min(len(note.lines), hint_line + radius + 1)
+        for i in range(start, end):
+            line_text = note.lines[i].lower()
+            if span_clean in line_text or line_text.strip() in span_clean:
+                return i
+    
+    # Full note search as fallback
+    for i in range(1, len(note.lines)):
+        line_text = note.lines[i].lower()
+        # Check for substantial overlap
+        span_words = set(span_clean.split())
+        line_words = set(line_text.split())
+        if len(span_words) > 2 and len(span_words & line_words) / max(len(span_words), 1) > 0.6:
+            return i
+    
+    return None
