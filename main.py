@@ -118,6 +118,12 @@ def main():
         default=0.1,
         help="LLM temperature (default: 0.1)"
     )
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=1,
+        help="Number of concurrent patient processing threads (default: 1)"
+    )
     args = parser.parse_args()
     
     setup_logging(args.verbose)
@@ -136,7 +142,7 @@ def main():
         logger.error("Patient list must be a JSON array of patient IDs")
         sys.exit(1)
     
-    logger.info(f"Processing {len(patient_ids)} patients")
+    logger.info(f"Processing {len(patient_ids)} patients (concurrency: {args.concurrency})")
     
     # Load taxonomy
     data_dir = Path(args.data_dir)
@@ -161,24 +167,55 @@ def main():
     
     # Process each patient
     results = {}
-    for patient_id in tqdm(patient_ids, desc="Processing patients"):
-        try:
-            result = process_patient(
-                llm=llm,
-                data_dir=data_dir,
-                patient_id=patient_id,
-                taxonomy=taxonomy,
-                train_dir=train_dir,
-                output_dir=output_dir,
-            )
-            if result:
-                results[patient_id] = result
-                n_conds = len(result.get("conditions", []))
-                logger.info(f"[OK] {patient_id}: {n_conds} conditions extracted")
-            else:
-                logger.error(f"[FAIL] {patient_id}: extraction failed")
-        except Exception as e:
-            logger.error(f"[FAIL] {patient_id}: {e}", exc_info=True)
+    
+    if args.concurrency > 1:
+        import concurrent.futures
+        
+        def process_wrapper(pid):
+            try:
+                res = process_patient(
+                    llm=llm,
+                    data_dir=data_dir,
+                    patient_id=pid,
+                    taxonomy=taxonomy,
+                    train_dir=train_dir,
+                    output_dir=output_dir,
+                )
+                if res:
+                    n = len(res.get("conditions", []))
+                    logger.info(f"[OK] {pid}: {n} conditions extracted")
+                else:
+                    logger.error(f"[FAIL] {pid}: extraction failed")
+                return pid, res
+            except Exception as e:
+                logger.error(f"[FAIL] {pid}: {e}", exc_info=True)
+                return pid, None
+                
+        with concurrent.futures.ThreadPoolExecutor(max_workers=args.concurrency) as executor:
+            futures = [executor.submit(process_wrapper, pid) for pid in patient_ids]
+            for future in tqdm(concurrent.futures.as_completed(futures), total=len(patient_ids), desc="Processing patients"):
+                pid, res = future.result()
+                if res:
+                    results[pid] = res
+    else:
+        for patient_id in tqdm(patient_ids, desc="Processing patients"):
+            try:
+                result = process_patient(
+                    llm=llm,
+                    data_dir=data_dir,
+                    patient_id=patient_id,
+                    taxonomy=taxonomy,
+                    train_dir=train_dir,
+                    output_dir=output_dir,
+                )
+                if result:
+                    results[patient_id] = result
+                    n_conds = len(result.get("conditions", []))
+                    logger.info(f"[OK] {patient_id}: {n_conds} conditions extracted")
+                else:
+                    logger.error(f"[FAIL] {patient_id}: extraction failed")
+            except Exception as e:
+                logger.error(f"[FAIL] {patient_id}: {e}", exc_info=True)
     
     # Summary
     logger.info(f"\n{'='*60}")
