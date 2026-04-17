@@ -1,0 +1,28 @@
+Install:
+---------------
+cd "c:\Stored\All Files\Coding\Projects\Clinical-LLM-Extractor"
+pip install -r requirements.txt
+---------------
+load variables;
+-----------------------
+foreach ($line in Get-Content .env) {
+  if ($line -match '^\s*([^#][^=]*?)\s*=\s*(.*)\s*$') {
+    [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process')
+  }
+}
+-------------------------
+
+pipeline:
+-----------------
+python main.py `
+  --data-dir ./train `
+  --patient-list ./train_patients.json `
+  --output-dir ./output/train `
+  --verbose
+------------------
+Validation;
+-----------------
+python scripts/validate_output.py `
+  --output-dir ./output/train `
+  --taxonomy taxonomy.json
+
