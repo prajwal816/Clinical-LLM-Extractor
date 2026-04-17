@@ -1,0 +1,421 @@
+{
+  "patient_id": "patient_16",
+  "conditions": [
+    {
+      "condition_name": "Severe open traumatic brain injury with fractures of the cranial vault, mastoid, and skull base",
+      "category": "neurological",
+      "subcategory": "traumatic",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 8,
+          "span": "Severe open traumatic brain injury with fractures of the cranial vault, mastoid, and skull base"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 7,
+          "span": "Open severe traumatic brain injury with fractures of the skull vault, mastoid, and skull base"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 29,
+          "span": "History of severe open head injury in a motocross accident with multiple skull fractures and distal dissection"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 12,
+          "span": "History of severe open head trauma with fractures of the cranial vault, mastoid, and skull base. Distal ICA dissection bilaterally. Bilateral hemispheric subarachnoid hemorrhage extending into the basal cisterns.mInfarct areas in the MCA-ACA border zones, right frontal, and left parietal. Malresorptive hydrocephalus."
+        }
+      ]
+    },
+    {
+      "condition_name": "Dissection of the distal internal carotid artery on both sides",
+      "category": "cardiovascular",
+      "subcategory": "vascular",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 12,
+          "span": "Dissection of the distal internal carotid artery on both sides"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 11,
+          "span": "Dissection of the distal ACI on both sides"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 32,
+          "span": "Distal ICA dissection bilaterally"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 14,
+          "span": "Distal ICA dissection bilaterally"
+        }
+      ]
+    },
+    {
+      "condition_name": "Subarachnoid hemorrhage involving both hemispheres and extending into the basal cisterns",
+      "category": "neurological",
+      "subcategory": "cerebrovascular",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 13,
+          "span": "Subarachnoid hemorrhage involving both hemispheres and extending into the basal cisterns"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 12,
+          "span": "Subarachnoid hemorrhage involving both hemispheres and extending into basal cisterns"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 15,
+          "span": "Bilateral hemispheric subarachnoid hemorrhage extending into the basal cisterns"
+        }
+      ]
+    },
+    {
+      "condition_name": "Infarct areas in the border zone between MCA-ACA on the right frontal and left parietal sides",
+      "category": "neurological",
+      "subcategory": "cerebrovascular",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_1",
+          "line_no": 15,
+          "span": "Infarct areas in the border zone between MCA-ACA on the right frontal and left parietal sides"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 18,
+          "span": "Infarct areas in the MCA-ACA border zones, right frontal, and left parietal"
+        }
+      ]
+    },
+    {
+      "condition_name": "Malresorptive hydrocephalus",
+      "category": "cardiovascular",
+      "subcategory": "structural",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_1",
+          "line_no": 19,
+          "span": "Malresorptive hydrocephalus"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 28,
+          "span": "Malresorptive hydrocephalus"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 18,
+          "span": "Malresorptive hydrocephalus"
+        }
+      ]
+    },
+    {
+      "condition_name": "Aspiration pneumonia",
+      "category": "infectious",
+      "subcategory": "bacterial",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 17,
+          "span": "Aspiration pneumonia"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 25,
+          "span": "Aspiration pneumonia"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 23,
+          "span": "History of aspiration pneumonia"
+        }
+      ]
+    },
+    {
+      "condition_name": "Rhabdomyolysis",
+      "category": "toxicological",
+      "subcategory": "poisoning",
+      "status": "resolved",
+      "onset": "April 2017",
+      "evidence": [
+        {
+          "note_id": "text_1",
+          "line_no": 23,
+          "span": "Rhabdomyolysis"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 21,
+          "span": "Rhabdomyolysis"
+        }
+      ]
+    },
+    {
+      "condition_name": "Right abducens nerve palsy and facial nerve palsy",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "August 2018",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 9,
+          "span": "Right abducens Nerve Palsy and Facial Nerve Palsy"
+        }
+      ]
+    },
+    {
+      "condition_name": "Lagophthalmos with corneal opacities due to eyelid closure deficit",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "August 2018",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 11,
+          "span": "Lagophthalmos with corneal opacities due to eyelid closure deficit"
+        }
+      ]
+    },
+    {
+      "condition_name": "Left abducens nerve palsy with slight compensatory head leftward rotation and preferred leftward gaze",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "August 2018",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 12,
+          "span": "Left Abducens Nerve Palsy with slight compensatory head leftward rotation and preferred leftward gaze"
+        }
+      ]
+    },
+    {
+      "condition_name": "Bilateral disc swelling",
+      "category": "cardiovascular",
+      "subcategory": "structural",
+      "status": "active",
+      "onset": "August 2018",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 16,
+          "span": "Bilateral disc swelling"
+        }
+      ]
+    },
+    {
+      "condition_name": "Suspected left cavernous internal carotid artery aneurysm following traumatic ICA dissection",
+      "category": "cardiovascular",
+      "subcategory": "vascular",
+      "status": "suspected",
+      "onset": "August 2018",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 17,
+          "span": "Suspected left cavernous internal carotid artery aneurysm following traumatic ICA dissection"
+        }
+      ]
+    },
+    {
+      "condition_name": "Pseudoaneurysm of the cavernous left internal carotid artery following traumatic carotid dissection",
+      "category": "cardiovascular",
+      "subcategory": "vascular",
+      "status": "active",
+      "onset": "May 2019",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 7,
+          "span": "Pseudoaneurysm of the cavernous left internal carotid artery following traumatic carotid dissection"
+        }
+      ]
+    },
+    {
+      "condition_name": "Abducens nerve palsy",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "May 2019",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 11,
+          "span": "Abducens nerve palsy"
+        }
+      ]
+    },
+    {
+      "condition_name": "Suspected Propofol infusion syndrome",
+      "category": "toxicological",
+      "subcategory": "poisoning",
+      "status": "suspected",
+      "onset": "May 2019",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 25,
+          "span": "Suspected Propofol infusion syndrome"
+        }
+      ]
+    },
+    {
+      "condition_name": "Anemia",
+      "category": "hematological",
+      "subcategory": "cytopenia",
+      "status": "active",
+      "onset": "November 1994",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 206,
+          "span": "Hemoglobin 7.6 g/dL 13.5-17.0 g/dL"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 198,
+          "span": "Hemoglobin 7.6 g/dL 13.5-17.0 g/dL"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 87,
+          "span": "Hemoglobin 7.8 g/dL 13.5-17.0 g/dL"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 98,
+          "span": "Hemoglobin 14.3 g/dL 13.5-17.0 g/dL"
+        }
+      ]
+    },
+    {
+      "condition_name": "Thrombocytopenia",
+      "category": "hematological",
+      "subcategory": "cytopenia",
+      "status": "active",
+      "onset": "November 1994",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 210,
+          "span": "Platelets 379 K/uL 150-370 K/uL"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 200,
+          "span": "Platelets 379 K/uL 150-370 K/uL"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 89,
+          "span": "Platelets 379 K/uL 150-370 K/uL"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 130,
+          "span": "Platelets 198 K/uL 150-370 K/uL"
+        }
+      ]
+    },
+    {
+      "condition_name": "Coagulopathy",
+      "category": "hematological",
+      "subcategory": "coagulation",
+      "status": "active",
+      "onset": "November 1994",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 216,
+          "span": "Quick 54% 78-123%"
+        },
+        {
+          "note_id": "text_0",
+          "line_no": 217,
+          "span": "INR 1.36 0.90-1.25"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 219,
+          "span": "Quick 54% 78-123%"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 219,
+          "span": "INR 1.36 0.90-1.25"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 108,
+          "span": "Quick > 78% 90%"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 108,
+          "span": "INR < 1.25 1.07"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 130,
+          "span": "Quick > 78% 90%"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 130,
+          "span": "INR < 1.25 1.07"
+        }
+      ]
+    },
+    {
+      "condition_name": "Hypoalbuminemia",
+      "category": "metabolic_endocrine",
+      "subcategory": "nutritional_deficiency",
+      "status": "active",
+      "onset": "November 1994",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 203,
+          "span": "Creatinine (Jaffé) 0.42 mg/dL 0.70-1.20 mg/dL"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 200,
+          "span": "Creatinine (Jaffé) 0.42 mg/dL 0.70-1.20 mg/dL"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 89,
+          "span": "Creatinine (Jaffé) 0.44 mg/dL 0.70-1.20 mg/dL"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 100,
+          "span": "Creatinine (Jaffé) 0.98 mg/dL 0.70-1.20 mg/dL"
+        }
+      ]
+    }
+  ]
+}

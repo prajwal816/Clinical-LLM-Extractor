@@ -1,0 +1,523 @@
+{
+  "patient_id": "patient_17",
+  "conditions": [
+    {
+      "condition_name": "Acute respiratory distress syndrome",
+      "category": "pulmonary",
+      "subcategory": "acute_respiratory",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 7,
+          "span": "ARDS in the context of a COVID-19 infection"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 6,
+          "span": "ARDS due to COVID-19 pneumonia"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 9,
+          "span": "COVID-19 with severe ARDS"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 8,
+          "span": "COVID-19 with severe ARDS"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 6,
+          "span": "Suspected Post-Intensive-Care Syndrome with:"
+        }
+      ]
+    },
+    {
+      "condition_name": "COVID-19 infection",
+      "category": "infectious",
+      "subcategory": "viral",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 7,
+          "span": "ARDS in the context of a COVID-19 infection"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 6,
+          "span": "ARDS due to COVID-19 pneumonia"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 14,
+          "span": "Initial detection of SARS-CoV-2 on 09/28/2021"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 13,
+          "span": "Initial detection of SARS-CoV-2 on 09/28/2021"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 16,
+          "span": "COVID-19 with severe ARDS"
+        }
+      ]
+    },
+    {
+      "condition_name": "Bronchial asthma",
+      "category": "pulmonary",
+      "subcategory": "obstructive",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 16,
+          "span": "Bronchial asthma"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 18,
+          "span": "Bronchial asthma"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 42,
+          "span": "Bronchial asthma"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 43,
+          "span": "Bronchial asthma"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 51,
+          "span": "Bronchial asthma"
+        }
+      ]
+    },
+    {
+      "condition_name": "Arterial hypertension",
+      "category": "cardiovascular",
+      "subcategory": "hypertensive",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 18,
+          "span": "Arterial hypertension"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 20,
+          "span": "Arterial hypertension"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 44,
+          "span": "Arterial hypertension"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 45,
+          "span": "Arterial hypertension"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 53,
+          "span": "Arterial hypertension"
+        }
+      ]
+    },
+    {
+      "condition_name": "Depression",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 20,
+          "span": "Depression"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 22,
+          "span": "Depression"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 46,
+          "span": "Depression"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 47,
+          "span": "Depression"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 55,
+          "span": "Depression"
+        }
+      ]
+    },
+    {
+      "condition_name": "Retinal central serous chorioretinopathy (history)",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "resolved",
+      "onset": null,
+      "evidence": [
+        {
+          "note_id": "text_0",
+          "line_no": 10,
+          "span": "Left eye pigment epithelium clumping, suggestive of a history of retinal central serous chorioretinopathy"
+        },
+        {
+          "note_id": "text_1",
+          "line_no": 10,
+          "span": "Left eye pigment epithelium clumping, suggestive of a history of retinal central serous chorioretinopathy"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 34,
+          "span": "Left eye pigment epithelium clumping, suggestive of a history of retinal central serous chorioretinopathy"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 35,
+          "span": "Left eye pigment epithelium clumping, suggestive of a history of retinal central serous chorioretinopathy"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 41,
+          "span": "Left eye pigment epithelium clumping, suggestive of a history of retinal central serous chorioretinopathy"
+        }
+      ]
+    },
+    {
+      "condition_name": "Rheumatoid arthritis",
+      "category": "musculoskeletal",
+      "subcategory": "connective_tissue_disorder",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_1",
+          "line_no": 14,
+          "span": "Rheumatoid arthritis"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 38,
+          "span": "Rheumatoid arthritis"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 39,
+          "span": "Rheumatoid arthritis"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 47,
+          "span": "Rheumatoid arthritis"
+        }
+      ]
+    },
+    {
+      "condition_name": "Aspergillus fumigatus infection (pulmonary)",
+      "category": "infectious",
+      "subcategory": "fungal",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_1",
+          "line_no": 5,
+          "span": "superinfection by Aspergillus fumigatus"
+        },
+        {
+          "note_id": "text_2",
+          "line_no": 22,
+          "span": "Pulmonary superinfection with detection of Aspergillus fumigatus"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 23,
+          "span": "Pulmonary superinfection with detection of Aspergillus fumigatus"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 31,
+          "span": "Pulmonary superinfection with detection of Aspergillus fumigatus"
+        }
+      ]
+    },
+    {
+      "condition_name": "Staphylococcus aureus bacteremia",
+      "category": "infectious",
+      "subcategory": "bacterial",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 25,
+          "span": "Bacteremia with detection of Staphylococcus aureus in blood culture on 10/19/21"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 26,
+          "span": "Bacteremia with detection of Staphylococcus aureus in blood culture on 10/19/21"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 34,
+          "span": "Bacteremia with detection of Staphylococcus aureus in blood culture on 10/19/21"
+        }
+      ]
+    },
+    {
+      "condition_name": "Thrombophlebitis of the right forearm",
+      "category": "cardiovascular",
+      "subcategory": "vascular",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_2",
+          "line_no": 31,
+          "span": "Thrombophlebitis of the right forearm"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 32,
+          "span": "Thrombophlebitis of the right forearm"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 40,
+          "span": "Thrombophlebitis of the right forearm"
+        }
+      ]
+    },
+    {
+      "condition_name": "ICU-acquired weakness",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "November 2021",
+      "evidence": [
+        {
+          "note_id": "text_4",
+          "line_no": 10,
+          "span": "ICU-acquired weakness"
+        }
+      ]
+    },
+    {
+      "condition_name": "Dysphagia",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_4",
+          "line_no": 8,
+          "span": "Dysphagia"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 87,
+          "span": "Dysphagia diagnosed during the intensive care unit stay has slightly improved"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 91,
+          "span": "Severe dysphagia was observed after invasive ventilation"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 149,
+          "span": "After extubation, severe dysphagia was observed"
+        }
+      ]
+    },
+    {
+      "condition_name": "Post-Intensive-Care Syndrome",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "suspected",
+      "onset": "November 2021",
+      "evidence": [
+        {
+          "note_id": "text_4",
+          "line_no": 6,
+          "span": "Suspected Post-Intensive-Care Syndrome"
+        }
+      ]
+    },
+    {
+      "condition_name": "Cognitive impairment",
+      "category": "neurological",
+      "subcategory": "functional",
+      "status": "active",
+      "onset": "November 2021",
+      "evidence": [
+        {
+          "note_id": "text_4",
+          "line_no": 67,
+          "span": "patient reports cognitive impairments with marked forgetfulness and difficulty concentrating"
+        }
+      ]
+    },
+    {
+      "condition_name": "Anemia",
+      "category": "hematological",
+      "subcategory": "cytopenia",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 156,
+          "span": "Hemoglobin 11.6 g/dL"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 188,
+          "span": "Red Blood Cells 3.7 M/µL"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 135,
+          "span": "Hemoglobin 13.2 g/dL (borderline low)"
+        }
+      ]
+    },
+    {
+      "condition_name": "Elevated gamma-glutamyl transferase",
+      "category": "gastrointestinal",
+      "subcategory": "hepatic",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 154,
+          "span": "Gamma-GT 200 U/L"
+        },
+        {
+          "note_id": "text_4",
+          "line_no": 135,
+          "span": "Gamma-GT 38 U/L (within normal)"
+        }
+      ]
+    },
+    {
+      "condition_name": "Congenital hepatic cyst",
+      "category": "gastrointestinal",
+      "subcategory": "hepatic",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 297,
+          "span": "entirely echo‑free cystic structure ... most likely a congenital cyst"
+        }
+      ]
+    },
+    {
+      "condition_name": "Pleural effusion (small, bilateral)",
+      "category": "pulmonary",
+      "subcategory": "structural",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 197,
+          "span": "Small bilateral pleural effusions"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 228,
+          "span": "small pleural effusion on the left"
+        }
+      ]
+    },
+    {
+      "condition_name": "Mild cardiomegaly / borderline enlarged heart",
+      "category": "cardiovascular",
+      "subcategory": "structural",
+      "status": "active",
+      "onset": "September 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 228,
+          "span": "Left‑biased heart without significant central congestion"
+        },
+        {
+          "note_id": "text_3",
+          "line_no": 228,
+          "span": "Heart borderline enlarged"
+        }
+      ]
+    },
+    {
+      "condition_name": "Eosinophilia",
+      "category": "hematological",
+      "subcategory": "cytopenia",
+      "status": "active",
+      "onset": "November 2021",
+      "evidence": [
+        {
+          "note_id": "text_4",
+          "line_no": 106,
+          "span": "Eosinophils 10.8 % (0.5-5.5 %)"
+        }
+      ]
+    },
+    {
+      "condition_name": "Hypokinesia of left ventricular lateral and anterior walls",
+      "category": "cardiovascular",
+      "subcategory": "structural",
+      "status": "active",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 341,
+          "span": "Hypokinesia of the lateral and anterior walls"
+        }
+      ]
+    },
+    {
+      "condition_name": "Post‑COVID myocarditis (suspected)",
+      "category": "cardiovascular",
+      "subcategory": "inflammatory_vascular",
+      "status": "suspected",
+      "onset": "October 2021",
+      "evidence": [
+        {
+          "note_id": "text_3",
+          "line_no": 401,
+          "span": "interpreted as post‑COVID myocarditis"
+        }
+      ]
+    }
+  ]
+}
